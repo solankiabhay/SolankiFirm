@@ -1,0 +1,2477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>Solanki Digital Platform XR - Future of Business Intelligence</title>
+    <meta name="description" content="Solanki Digital Platform XR - Immersive AR/VR SaaS platform with 3D holographic dashboards, business analytics, and trading simulation."/>
+    
+    <meta property="og:title" content="Solanki Digital Platform XR" />
+    <meta property="og:description" content="Enter the Future of Business Intelligence" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://solankidigitalxr.com" />
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Solanki Digital Platform XR",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web, iOS, Android",
+        "description": "Immersive AR/VR SaaS platform with 3D holographic dashboards, business analytics, and trading simulation.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        /* ─── RESET & BASE ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg-primary: #05050a;
+            --bg-secondary: #0a0a18;
+            --neon-blue: #00d4ff;
+            --neon-purple: #7c3aed;
+            --neon-pink: #ec4899;
+            --neon-cyan: #06f7f7;
+            --neon-green: #22c55e;
+            --neon-orange: #f59e0b;
+            --neon-red: #ef4444;
+            --glass-bg: rgba(255,255,255,0.03);
+            --border-glass: rgba(255,255,255,0.06);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            user-select: none;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 2px; }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        /* ─── SERVICES OVERLAY ─── */
+        #services-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #services-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #services-overlay .backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(5,5,10,0.92);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+        #services-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            width: 94%;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        #services-content::-webkit-scrollbar { width: 3px; }
+        #services-content::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
+
+        /* ─── SERVICES HEADER ─── */
+        .services-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .services-header .badge {
+            display: inline-block;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.2);
+            padding: 8px 28px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 12px;
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(0,212,255,0.2); }
+            50% { border-color: rgba(0,212,255,0.6); }
+        }
+        .services-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.05;
+        }
+        .services-header h2 span {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .services-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-top: 12px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .services-header .glow-line {
+            width: 120px;
+            height: 3px;
+            margin: 20px auto 0;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-purple), transparent);
+            border-radius: 2px;
+        }
+        .services-header .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .services-header .stat-item {
+            text-align: center;
+        }
+        .services-header .stat-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .services-header .stat-item .label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ─── SERVICES GRID WITH VISUAL CARDS ─── */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+        }
+        .service-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 2;
+        }
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            border-color: rgba(0,212,255,0.3);
+            box-shadow: 0 20px 80px rgba(0,212,255,0.1);
+        }
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card .card-visual {
+            position: relative;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(circle at 30% 30%, rgba(0,212,255,0.05), transparent 70%);
+            border-bottom: 1px solid var(--border-glass);
+        }
+        .service-card .card-visual .icon-big {
+            font-size: 4rem;
+            color: var(--neon-blue);
+            opacity: 0.6;
+            transition: all 0.4s;
+            filter: drop-shadow(0 0 40px rgba(0,212,255,0.1));
+        }
+        .service-card:hover .card-visual .icon-big {
+            transform: scale(1.15) rotate(-5deg);
+            opacity: 1;
+            filter: drop-shadow(0 0 60px rgba(0,212,255,0.3));
+        }
+        .service-card .card-visual .visual-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.15);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--neon-blue);
+        }
+        .service-card .card-visual .chart-preview {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding: 0 16px 8px;
+            opacity: 0.3;
+        }
+        .service-card .card-visual .chart-preview .bar {
+            flex: 1;
+            border-radius: 2px 2px 0 0;
+            background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+            min-height: 8px;
+            transition: all 0.4s;
+        }
+        .service-card:hover .card-visual .chart-preview .bar {
+            opacity: 1;
+        }
+        .service-card .card-visual .chart-preview .bar:nth-child(1) { height: 40%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(2) { height: 70%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(3) { height: 30%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(4) { height: 90%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(5) { height: 50%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(6) { height: 65%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(7) { height: 45%; }
+        .service-card .card-visual .chart-preview .bar:nth-child(8) { height: 80%; }
+
+        .service-card .card-body {
+            padding: 24px 24px 20px;
+            flex: 1;
+        }
+        .service-card .card-body h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .service-card .card-body h3 .tag-icon {
+            font-size: 0.6rem;
+            color: var(--neon-blue);
+            background: rgba(0,212,255,0.08);
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .service-card .card-body p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .service-card .card-footer {
+            padding: 14px 24px 20px;
+            border-top: 1px solid var(--border-glass);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .service-card .card-footer .metric {
+            text-align: center;
+        }
+        .service-card .card-footer .metric .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+        .service-card .card-footer .metric .label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            opacity: 0.6;
+            letter-spacing: 0.05em;
+        }
+
+        /* Color Variants */
+        .service-card.purple .card-visual { background: radial-gradient(circle at 30% 30%, rgba(124,58,237,0.05), transparent 70%); }
+        .service-card.purple .card-visual .icon-big { color: var(--neon-purple); filter: drop-shadow(0 0 40px rgba(124,58,237,0.1)); }
+        .service-card.purple .card-footer .metric .value { color: var(--neon-purple); }
+        .service-card.purple .card-body h3 .tag-icon { color: var(--neon-purple); background: rgba(124,58,237,0.08); }
+        .service-card.purple::before { background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); }
+
+        .service-card.pink .card-visual { background: radial-gradient(circle at 30% 30%, rgba(236,72,153,0.05), transparent 70%); }
+        .service-card.pink .card-visual .icon-big { color: var(--neon-pink); filter: drop-shadow(0 0 40px rgba(236,72,153,0.1)); }
+        .service-card.pink .card-footer .metric .value { color: var(--neon-pink); }
+        .service-card.pink .card-body h3 .tag-icon { color: var(--neon-pink); background: rgba(236,72,153,0.08); }
+        .service-card.pink::before { background: linear-gradient(90deg, var(--neon-pink), var(--neon-orange)); }
+
+        .service-card.green .card-visual { background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.05), transparent 70%); }
+        .service-card.green .card-visual .icon-big { color: var(--neon-green); filter: drop-shadow(0 0 40px rgba(34,197,94,0.1)); }
+        .service-card.green .card-footer .metric .value { color: var(--neon-green); }
+        .service-card.green .card-body h3 .tag-icon { color: var(--neon-green); background: rgba(34,197,94,0.08); }
+        .service-card.green::before { background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan)); }
+
+        .service-card.orange .card-visual { background: radial-gradient(circle at 30% 30%, rgba(245,158,11,0.05), transparent 70%); }
+        .service-card.orange .card-visual .icon-big { color: var(--neon-orange); filter: drop-shadow(0 0 40px rgba(245,158,11,0.1)); }
+        .service-card.orange .card-footer .metric .value { color: var(--neon-orange); }
+        .service-card.orange .card-body h3 .tag-icon { color: var(--neon-orange); background: rgba(245,158,11,0.08); }
+        .service-card.orange::before { background: linear-gradient(90deg, var(--neon-orange), var(--neon-pink)); }
+
+        .service-card.cyan .card-visual { background: radial-gradient(circle at 30% 30%, rgba(6,247,247,0.05), transparent 70%); }
+        .service-card.cyan .card-visual .icon-big { color: var(--neon-cyan); filter: drop-shadow(0 0 40px rgba(6,247,247,0.1)); }
+        .service-card.cyan .card-footer .metric .value { color: var(--neon-cyan); }
+        .service-card.cyan .card-body h3 .tag-icon { color: var(--neon-cyan); background: rgba(6,247,247,0.08); }
+        .service-card.cyan::before { background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue)); }
+
+        /* ─── BOOK NOW BUTTON ─── */
+        .service-card .book-btn {
+            margin: 0 24px 20px;
+            padding: 10px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08));
+            border: 1px solid rgba(0,212,255,0.1);
+            color: var(--neon-blue);
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .service-card .book-btn:hover {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0,212,255,0.3);
+        }
+        .service-card .book-btn i { font-size: 0.9rem; }
+
+        /* ─── CONTACT SECTION ─── */
+        .contact-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-glass);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .contact-section .contact-info h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .contact-section .contact-info h3 span {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .contact-socials {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .contact-social {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.4s;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .contact-social:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: rgba(0,212,255,0.3);
+            color: var(--text-primary);
+        }
+        .contact-social i { font-size: 1.1rem; }
+        .contact-social.whatsapp:hover { border-color: #25D366; color: #25D366; background: rgba(37,211,102,0.05); }
+        .contact-social.instagram:hover { border-color: #E4405F; color: #E4405F; background: rgba(228,64,95,0.05); }
+        .contact-social.email:hover { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,212,255,0.05); }
+        .contact-social.phone:hover { border-color: var(--neon-green); color: var(--neon-green); background: rgba(34,197,94,0.05); }
+
+        .inquiry-form {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px 28px;
+            transition: all 0.4s;
+        }
+        .inquiry-form:hover {
+            border-color: rgba(0,212,255,0.2);
+            box-shadow: 0 0 40px rgba(0,212,255,0.03);
+        }
+        .inquiry-form h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .inquiry-form h4 i { color: var(--neon-blue); }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-group { margin-bottom: 12px; }
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0,212,255,0.05);
+            background: rgba(0,212,255,0.02);
+        }
+        .form-group select option { background: var(--bg-primary); }
+        .form-group textarea {
+            height: 70px;
+            resize: vertical;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0,212,255,0.3);
+        }
+
+        .services-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            z-index: 5;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            pointer-events: auto;
+        }
+        .services-close:hover {
+            border-color: var(--neon-blue);
+            color: var(--text-primary);
+            background: rgba(0,212,255,0.05);
+            transform: rotate(90deg) scale(1.05);
+            box-shadow: 0 0 40px rgba(0,212,255,0.1);
+        }
+
+        /* ─── OPEN SERVICES BUTTON ─── */
+        #open-services {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+            padding: 14px 34px;
+            background: rgba(5,5,10,0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,212,255,0.25);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 0 60px rgba(0,212,255,0.05);
+            letter-spacing: 0.02em;
+        }
+        #open-services:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 80px rgba(0,212,255,0.2);
+            transform: translateX(-50%) translateY(-3px) scale(1.03);
+        }
+        #open-services i {
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            animation: float-icon 2s ease-in-out infinite;
+        }
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        #open-services .pulse-ring {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            animation: pulse-dot 1.5s infinite;
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(0,212,255,0.3);
+        }
+
+        /* ─── NAVBAR ─── */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 24px;
+            background: rgba(5,5,10,0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        .nav-logo .logo-icon {
+            font-size: 1.6rem;
+            color: var(--neon-blue);
+            filter: drop-shadow(0 0 20px rgba(0,212,255,0.3));
+        }
+        .nav-logo .gradient-text {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-logo .xr-badge {
+            font-size: 0.5rem;
+            background: rgba(0,212,255,0.15);
+            border: 1px solid rgba(0,212,255,0.2);
+            padding: 2px 8px;
+            border-radius: 50px;
+            color: var(--neon-blue);
+            -webkit-text-fill-color: var(--neon-blue);
+            letter-spacing: 0.1em;
+        }
+        .nav-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-btn:hover {
+            border-color: var(--neon-blue);
+            color: var(--text-primary);
+            background: rgba(0,212,255,0.05);
+            box-shadow: 0 0 30px rgba(0,212,255,0.1);
+        }
+        .nav-btn.active {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            background: rgba(0,212,255,0.08);
+            box-shadow: 0 0 30px rgba(0,212,255,0.15);
+        }
+        .nav-btn .indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .nav-btn .indicator.on { background: #22c55e; }
+        .nav-btn .indicator.off { background: #ef4444; }
+
+        #mode-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+            padding: 10px 24px;
+            background: rgba(5,5,10,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        #mode-indicator .mode-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+        #mode-indicator .mode-dot.xr { background: var(--neon-blue); }
+        #mode-indicator .mode-dot.ar { background: var(--neon-purple); }
+        #mode-indicator .mode-dot.vr { background: var(--neon-pink); }
+        #mode-indicator .mode-dot.dashboard { background: var(--neon-cyan); }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.6); }
+        }
+
+        #hud-info {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 50;
+            text-align: right;
+            pointer-events: none;
+        }
+        #hud-info .hud-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+        #hud-info .hud-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #hud-info .hud-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        #loading {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loading .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--border-glass);
+            border-top: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loading p {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        /* ─── CHATBOT STYLES ─── */
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 160px;
+            right: 24px;
+            z-index: 200;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: #fff;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 4px 40px rgba(0,212,255,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: chatbot-float 3s ease-in-out infinite;
+        }
+        #chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 60px rgba(0,212,255,0.5);
+        }
+        #chatbot-toggle .notification-dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ef4444;
+            border: 2px solid var(--bg-primary);
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes chatbot-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        #chatbot-container {
+            position: fixed;
+            bottom: 230px;
+            right: 24px;
+            z-index: 200;
+            width: 380px;
+            height: 500px;
+            max-height: 70vh;
+            background: rgba(10,10,20,0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,212,255,0.05);
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #chatbot-container.open {
+            display: flex;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chatbot-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,212,255,0.03);
+        }
+        .chatbot-header .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .chatbot-header .chat-title .ai-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        .chatbot-header .chat-status {
+            font-size: 0.6rem;
+            color: var(--neon-green);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chatbot-header .chat-status .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            animation: pulse-dot 1.5s infinite;
+        }
+        .chatbot-header .close-chat {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 4px;
+        }
+        .chatbot-header .close-chat:hover {
+            color: var(--text-primary);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 16px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chatbot-messages::-webkit-scrollbar { width: 3px; }
+        .chatbot-messages::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            animation: msgIn 0.3s ease-out;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .message.bot {
+            align-self: flex-start;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-glass);
+            border-bottom-left-radius: 4px;
+            color: var(--text-primary);
+        }
+        .message.bot .msg-sender {
+            font-size: 0.55rem;
+            color: var(--neon-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
+            border: 1px solid rgba(0,212,255,0.1);
+            border-bottom-right-radius: 4px;
+            color: var(--text-primary);
+        }
+        .message .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0;
+        }
+        .message .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            animation: typingDot 1.4s infinite;
+        }
+        .message .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .message .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .chatbot-input {
+            padding: 12px 16px 16px;
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chatbot-input input:focus {
+            border-color: var(--neon-blue);
+        }
+        .chatbot-input input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+        .chatbot-input .send-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chatbot-input .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0,212,255,0.2);
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 6px;
+            padding: 0 16px 8px;
+            flex-wrap: wrap;
+        }
+        .quick-reply {
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: rgba(0,212,255,0.06);
+            border: 1px solid rgba(0,212,255,0.08);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .quick-reply:hover {
+            background: rgba(0,212,255,0.12);
+            border-color: rgba(0,212,255,0.2);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            #chatbot-container {
+                width: calc(100vw - 32px);
+                right: 16px;
+                bottom: 200px;
+                height: 60vh;
+            }
+            #chatbot-toggle {
+                bottom: 130px;
+                right: 16px;
+                width: 52px;
+                height: 52px;
+                font-size: 1.3rem;
+            }
+        }
+        @media (max-width: 480px) {
+            #chatbot-container {
+                width: calc(100vw - 24px);
+                right: 12px;
+                bottom: 180px;
+                height: 55vh;
+            }
+            #chatbot-toggle {
+                bottom: 110px;
+                right: 12px;
+                width: 48px;
+                height: 48px;
+                font-size: 1.1rem;
+            }
+            .message {
+                max-width: 92%;
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════ LOADING ═══════════════════ -->
+<div id="loading">
+    <div class="loader-ring"></div>
+    <p>INITIALIZING XR PLATFORM...</p>
+</div>
+
+<!-- ═══════════════════ THREE.JS CANVAS ═══════════════════ -->
+<div id="three-canvas"></div>
+
+<!-- ═══════════════════ CHATBOT ────────────────────────────────── -->
+<button id="chatbot-toggle" onclick="toggleChatbot()" title="Chat with AI Assistant">
+    <i class="fas fa-robot"></i>
+    <span class="notification-dot"></span>
+</button>
+
+<div id="chatbot-container">
+    <div class="chatbot-header">
+        <div class="chat-title">
+            <div class="ai-icon"><i class="fas fa-robot"></i></div>
+            <span>AI Assistant</span>
+        </div>
+        <div class="chat-status">
+            <span class="live-dot"></span>
+            <span>Online</span>
+        </div>
+        <button class="close-chat" onclick="toggleChatbot()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+        <div class="message bot">
+            <div class="msg-sender">🤖 AI Assistant</div>
+            👋 Hello! Welcome to <strong>Solanki Digital Platform XR</strong>.<br/>
+            I'm here to help you with:
+            <br/>• 💰 Billing & Invoicing
+            <br/>• 📊 Analytics Dashboard
+            <br/>• 📈 Trading Simulation
+            <br/>• 🤖 AI Insights
+            <br/><br/>Ask me anything about our services!
+        </div>
+    </div>
+    <div class="quick-replies">
+        <button class="quick-reply" onclick="quickReply('Tell me about your billing system')">💰 Billing</button>
+        <button class="quick-reply" onclick="quickReply('What analytics do you offer?')">📊 Analytics</button>
+        <button class="quick-reply" onclick="quickReply('Tell me about AI insights')">🤖 AI Insights</button>
+        <button class="quick-reply" onclick="quickReply('How can I book a service?')">📅 Book Now</button>
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()"/>
+        <button class="send-btn" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<!-- ═══════════════════ SERVICES OVERLAY ═══════════════════ -->
+<div id="services-overlay">
+    <div class="backdrop"></div>
+    <button class="services-close" onclick="closeServices()">
+        <i class="fas fa-times"></i>
+    </button>
+    <div id="services-content">
+        <div class="services-header">
+            <div class="badge"><i class="fas fa-cubes"></i> Premium Enterprise Services</div>
+            <h2>Transform Your Business <span>With Our Solutions</span></h2>
+            <p>Cutting-edge technology services designed to supercharge your business growth</p>
+            <div class="glow-line"></div>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="number">10+</div>
+                    <div class="label">Services</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">50+</div>
+                    <div class="label">Expert Team</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">99.9%</div>
+                    <div class="label">Satisfaction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">24/7</div>
+                    <div class="label">Support</div>
+                </div>
+            </div>
+        </div>
+        <div class="services-grid">
+            
+            <!-- Service 1: Billing & Invoicing System -->
+            <div class="service-card">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-receipt"></i></div>
+                    <span class="visual-badge">Popular</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Billing & Invoicing System <span class="tag-icon">Automated</span></h3>
+                    <p>Automated invoice generation, GST calculations, multi-currency support, payment tracking, and seamless financial operations for businesses of all sizes.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">98%</div><div class="label">Accuracy</div></div>
+                    <div class="metric"><div class="value">5x</div><div class="label">Faster</div></div>
+                    <div class="metric"><div class="value">100+</div><div class="label">Templates</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Billing & Invoicing System')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 2: Business Analytics Dashboard -->
+            <div class="service-card purple">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-chart-pie"></i></div>
+                    <span class="visual-badge">Real-Time</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Business Analytics Dashboard <span class="tag-icon">AI-Powered</span></h3>
+                    <p>Real-time data visualization, revenue tracking, customer analytics, predictive insights, and interactive reports for data-driven decision making.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">24/7</div><div class="label">Live Data</div></div>
+                    <div class="metric"><div class="value">50+</div><div class="label">Metrics</div></div>
+                    <div class="metric"><div class="value">95%</div><div class="label">Accuracy</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Business Analytics Dashboard')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 3: Trading Simulation Platform -->
+            <div class="service-card pink">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-chart-simple"></i></div>
+                    <span class="visual-badge">Educational</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Trading Simulation Platform <span class="tag-icon">Risk-Free</span></h3>
+                    <p>Educational trading tools with option chain visualization, candlestick charts, market trend analysis, and risk-free simulated trading environments.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">1000+</div><div class="label">Simulations</div></div>
+                    <div class="metric"><div class="value">Real-Time</div><div class="label">Data</div></div>
+                    <div class="metric"><div class="value">Zero Risk</div><div class="label">Learning</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Trading Simulation Platform')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 4: AI-Powered Insights Engine -->
+            <div class="service-card cyan">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-brain"></i></div>
+                    <span class="visual-badge">Intelligent</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>AI-Powered Insights Engine <span class="tag-icon">Advanced</span></h3>
+                    <p>Intelligent business recommendations, predictive analytics, market sentiment analysis, automated reporting, and actionable intelligence powered by AI.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">99%</div><div class="label">Accuracy</div></div>
+                    <div class="metric"><div class="value">Real-Time</div><div class="label">Analysis</div></div>
+                    <div class="metric"><div class="value">24/7</div><div class="label">Insights</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('AI-Powered Insights Engine')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 5: 3D Data Visualization -->
+            <div class="service-card green">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-cube"></i></div>
+                    <span class="visual-badge">Immersive</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>3D Data Visualization <span class="tag-icon">Holographic</span></h3>
+                    <p>Immersive 3D charts, holographic dashboards, interactive data cubes, spatial analytics, and next-gen business intelligence visualization tools.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">4K</div><div class="label">Resolution</div></div>
+                    <div class="metric"><div class="value">60 FPS</div><div class="label">Smooth</div></div>
+                    <div class="metric"><div class="value">XR Ready</div><div class="label">Technology</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('3D Data Visualization')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 6: AR/VR Business Solutions -->
+            <div class="service-card orange">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-vr-cardboard"></i></div>
+                    <span class="visual-badge">Metaverse</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>AR/VR Business Solutions <span class="tag-icon">Immersive</span></h3>
+                    <p>Augmented reality product visualization, virtual showrooms, immersive training modules, VR collaboration spaces, and metaverse-ready experiences.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">360°</div><div class="label">Experience</div></div>
+                    <div class="metric"><div class="value">Real-Time</div><div class="label">Interaction</div></div>
+                    <div class="metric"><div class="value">Multi-User</div><div class="label">Collaboration</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('AR/VR Business Solutions')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 7: Custom SaaS Development -->
+            <div class="service-card purple">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-cloud"></i></div>
+                    <span class="visual-badge">Scalable</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Custom SaaS Development <span class="tag-icon">Enterprise</span></h3>
+                    <p>Tailored software solutions with scalable microservices architecture, multi-tenancy, API integrations, and enterprise-grade security compliance.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">99.9%</div><div class="label">Uptime</div></div>
+                    <div class="metric"><div class="value">Enterprise</div><div class="label">Grade</div></div>
+                    <div class="metric"><div class="value">API Ready</div><div class="label">Integration</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Custom SaaS Development')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 8: Website Development -->
+            <div class="service-card cyan">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-code"></i></div>
+                    <span class="visual-badge">Modern</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Website Development <span class="tag-icon">Full-Stack</span></h3>
+                    <p>Custom website development with responsive design, CMS integration, e-commerce solutions, and modern frameworks for a powerful online presence.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">100+</div><div class="label">Websites</div></div>
+                    <div class="metric"><div class="value">50+</div><div class="label">Frameworks</div></div>
+                    <div class="metric"><div class="value">4.9★</div><div class="label">Rating</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Website Development')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 9: Digital Transformation Consulting -->
+            <div class="service-card orange">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-rocket"></i></div>
+                    <span class="visual-badge">Strategic</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Digital Transformation Consulting <span class="tag-icon">Innovation</span></h3>
+                    <p>Strategic guidance for digital adoption, workflow automation, technology integration, innovation roadmap planning, and change management.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">10+</div><div class="label">Years Exp</div></div>
+                    <div class="metric"><div class="value">100+</div><div class="label">Clients</div></div>
+                    <div class="metric"><div class="value">4.9★</div><div class="label">Rating</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('Digital Transformation Consulting')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+            <!-- Service 10: 24/7 Technical Support -->
+            <div class="service-card green">
+                <div class="card-visual">
+                    <div class="icon-big"><i class="fas fa-headset"></i></div>
+                    <span class="visual-badge">Always On</span>
+                    <div class="chart-preview">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>24/7 Technical Support <span class="tag-icon">Instant</span></h3>
+                    <p>Round-the-clock technical assistance, proactive system monitoring, predictive maintenance, dedicated account management, and rapid response SLAs.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="metric"><div class="value">&lt;5min</div><div class="label">Response</div></div>
+                    <div class="metric"><div class="value">24/7</div><div class="label">Availability</div></div>
+                    <div class="metric"><div class="value">99%</div><div class="label">Satisfaction</div></div>
+                </div>
+                <a href="javascript:void(0)" class="book-btn" onclick="openInquiry('24/7 Technical Support')">
+                    <i class="fas fa-calendar-check"></i> Book Now
+                </a>
+            </div>
+            
+        </div>
+
+        <!-- ─── CONTACT & INQUIRY SECTION ─── -->
+        <div class="contact-section">
+            <div class="contact-info">
+                <h3>📞 <span>Connect With Us</span></h3>
+                <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px;">Reach out through any of these channels. We respond within minutes.</p>
+                <div class="contact-socials">
+                    <a href="https://wa.me/919309391112?text=Hi%20Solanki%20Digital%20Platform%2C%20I%20want%20to%20know%20more%20about%20your%20services" target="_blank" class="contact-social whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp <span class="social-label">| Quick Reply</span></span>
+                    </a>
+                    <a href="https://www.instagram.com/solankidigital" target="_blank" class="contact-social instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram <span class="social-label">| Follow Us</span></span>
+                    </a>
+                    <a href="mailto:solankiabhayp@gmail.com?subject=Inquiry%20About%20Solanki%20Digital%20Platform%20Services" class="contact-social email">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email <span class="social-label">| solankiabhayp@gmail.com</span></span>
+                    </a>
+                    <a href="tel:+919309391112" class="contact-social phone">
+                        <i class="fas fa-phone"></i>
+                        <span>Call <span class="social-label">| +91 91757 09089</span></span>
+                    </a>
+                </div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+                    <span style="font-size:0.7rem;color:var(--text-secondary);opacity:0.5;">
+                        <i class="fas fa-clock"></i> Available 24/7
+                    </span>
+                    <span style="font-size:0.7rem;color:var(--text-secondary);opacity:0.5;">
+                        <i class="fas fa-globe"></i> Global Support
+                    </span>
+                    <span style="font-size:0.7rem;color:var(--text-secondary);opacity:0.5;">
+                        <i class="fas fa-shield-alt"></i> 100% Confidential
+                    </span>
+                </div>
+            </div>
+
+            <div class="inquiry-form" id="inquiryFormContainer">
+                <h4><i class="fas fa-paper-plane"></i> Send Inquiry</h4>
+                <form id="inquiryForm" onsubmit="submitInquiry(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="John Doe" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="emailAddr" placeholder="john@example.com" required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phoneNum" placeholder="+91 98765 43210" />
+                        </div>
+                        <div class="form-group">
+                            <label>Service Interested In</label>
+                            <select id="serviceSelect">
+                                <option value="">Select a service</option>
+                                <option>Billing & Invoicing System</option>
+                                <option>Business Analytics Dashboard</option>
+                                <option>Trading Simulation Platform</option>
+                                <option>AI-Powered Insights Engine</option>
+                                <option>3D Data Visualization</option>
+                                <option>AR/VR Business Solutions</option>
+                                <option>Custom SaaS Development</option>
+                                <option>Website Development</option>
+                                <option>Digital Transformation Consulting</option>
+                                <option>24/7 Technical Support</option>
+                                <option>Other / Custom Solution</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="msgContent" placeholder="Tell us about your requirements..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-rocket"></i> Send Inquiry
+                    </button>
+                </form>
+                <div id="formSuccess" style="display:none;margin-top:12px;padding:12px;border-radius:10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#22c55e;text-align:center;font-weight:600;">
+                    <i class="fas fa-check-circle"></i> Thank you! We'll get back to you within 2 hours.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ OPEN SERVICES BUTTON ═══════════════════ -->
+<button id="open-services" onclick="openServices()">
+    <i class="fas fa-cubes"></i>
+    <span class="btn-text">Explore <span class="highlight">Our Services</span></span>
+    <span class="pulse-ring"></span>
+</button>
+
+<!-- ═══════════════════ NAVBAR ────────────────────────────────── -->
+<nav id="navbar">
+    <div class="nav-logo" id="logoContainer">
+        <span class="logo-icon" id="logoIcon"><i class="fas fa-cube"></i></span>
+        <span class="gradient-text" id="logoText">Solanki</span>
+        <span style="color:var(--text-secondary);font-weight:400;" id="logoXR">XR</span>
+        <span class="xr-badge">v2.0</span>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn active" data-mode="dashboard" onclick="setMode('dashboard')">
+            <i class="fas fa-cubes"></i> <span>Dashboard</span>
+        </button>
+        <button class="nav-btn" data-mode="ar" onclick="setMode('ar')">
+            <i class="fas fa-camera"></i> <span>AR</span>
+        </button>
+        <button class="nav-btn" data-mode="vr" onclick="setMode('vr')">
+            <i class="fas fa-vr-cardboard"></i> <span>VR</span>
+        </button>
+        <button class="nav-btn" onclick="toggleAI()">
+            <i class="fas fa-brain"></i> <span>AI</span>
+            <span class="indicator on" id="ai-indicator"></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ═══════════════════ HUD INFO ═══════════════════ -->
+<div id="hud-info">
+    <div class="hud-title">System Status</div>
+    <div class="hud-value" id="hud-status">ONLINE</div>
+    <div class="hud-sub" id="hud-mode">DASHBOARD MODE</div>
+</div>
+
+<!-- ═══════════════════ MODE INDICATOR ═══════════════════ -->
+<div id="mode-indicator">
+    <span class="mode-dot xr" id="mode-dot"></span>
+    <span id="mode-label">DASHBOARD MODE</span>
+    <span style="opacity:0.3;">|</span>
+    <span style="font-size:0.65rem;color:var(--text-secondary);">
+        <i class="fas fa-arrows-alt"></i> Drag to orbit · <i class="fas fa-mouse"></i> Scroll to zoom
+    </span>
+</div>
+
+<!-- ═══════════════════ THREE.JS SCRIPT ═══════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+    // ─── 3D MOVABLE LOGO ───
+    function create3DLogo() {
+        const logoGroup = new THREE.Group();
+        
+        const cubeGeo = new THREE.BoxGeometry(0.6, 0.6, 0.6);
+        const cubeMat = new THREE.MeshPhysicalMaterial({
+            color: 0x00d4ff,
+            emissive: 0x00d4ff,
+            emissiveIntensity: 0.3,
+            metalness: 0.8,
+            roughness: 0.1,
+            transparent: true,
+            opacity: 0.9,
+            clearcoat: 0.5,
+            clearcoatRoughness: 0.1,
+        });
+        const cube = new THREE.Mesh(cubeGeo, cubeMat);
+        cube.castShadow = true;
+        logoGroup.add(cube);
+
+        const coreGeo = new THREE.SphereGeometry(0.2, 16, 16);
+        const coreMat = new THREE.MeshBasicMaterial({
+            color: 0x00d4ff,
+            transparent: true,
+            opacity: 0.4,
+            blending: THREE.AdditiveBlending,
+        });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        logoGroup.add(core);
+
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: 0x7c3aed,
+            transparent: true,
+            opacity: 0.3,
+            wireframe: true,
+            blending: THREE.AdditiveBlending,
+        });
+        const ringGeo = new THREE.TorusGeometry(0.5, 0.015, 8, 24);
+        const ring1 = new THREE.Mesh(ringGeo, ringMat);
+        ring1.rotation.x = Math.PI / 2;
+        logoGroup.add(ring1);
+
+        const ring2 = new THREE.Mesh(ringGeo, ringMat);
+        ring2.rotation.y = Math.PI / 2;
+        ring2.material = ringMat.clone();
+        ring2.material.color.setHex(0xec4899);
+        logoGroup.add(ring2);
+
+        const ring3 = new THREE.Mesh(ringGeo, ringMat);
+        ring3.rotation.z = Math.PI / 2;
+        ring3.material = ringMat.clone();
+        ring3.material.color.setHex(0x06f7f7);
+        logoGroup.add(ring3);
+
+        const particleCount = 30;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            const theta = (i / particleCount) * Math.PI * 2;
+            const radius = 0.9;
+            particlePositions[i * 3] = Math.cos(theta) * radius;
+            particlePositions[i * 3 + 1] = Math.sin(theta * 0.5) * 0.3;
+            particlePositions[i * 3 + 2] = Math.sin(theta) * radius;
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0x00d4ff,
+            size: 0.03,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending,
+        });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        logoGroup.add(particles);
+
+        logoGroup.position.set(0, 1.2, 0);
+        logoGroup.scale.set(1, 1, 1);
+        
+        logoGroup.userData = {
+            rotSpeedX: 0.005,
+            rotSpeedY: 0.01,
+            rotSpeedZ: 0.003,
+            floatSpeed: 0.5,
+            floatAmp: 0.15,
+            phase: 0,
+        };
+
+        scene.add(logoGroup);
+        return logoGroup;
+    }
+
+    // ─── CONFIG ───
+    const CONFIG = {
+        mode: 'dashboard',
+        aiActive: true,
+        particles: 2500,
+        floatingPanels: 8,
+        dataPoints: 50,
+    };
+
+    // ─── DOM REFS ───
+    const container = document.getElementById('three-canvas');
+    const loading = document.getElementById('loading');
+    const modeDot = document.getElementById('mode-dot');
+    const modeLabel = document.getElementById('mode-label');
+    const hudStatus = document.getElementById('hud-status');
+    const hudMode = document.getElementById('hud-mode');
+
+    // ─── THREE.JS SETUP ───
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x05050a, 0.0018);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 4, 14);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    // ─── CONTROLS ───
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.8;
+    controls.minDistance = 4;
+    controls.maxDistance = 25;
+    controls.maxPolarAngle = Math.PI / 2.2;
+    controls.target.set(0, 0.5, 0);
+
+    // ─── LIGHTS ───
+    const ambientLight = new THREE.AmbientLight(0x222244, 0.4);
+    scene.add(ambientLight);
+
+    const mainLight = new THREE.DirectionalLight(0x00d4ff, 1.2);
+    mainLight.position.set(5, 10, 7);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
+
+    const fillLight = new THREE.DirectionalLight(0x7c3aed, 0.6);
+    fillLight.position.set(-5, -2, 5);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xec4899, 0.4);
+    rimLight.position.set(0, -5, -10);
+    scene.add(rimLight);
+
+    // ─── CREATE 3D LOGO ───
+    const logo3D = create3DLogo();
+
+    // ─── PARTICLE SYSTEM ───
+    function createParticles() {
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(CONFIG.particles * 3);
+        const colors = new Float32Array(CONFIG.particles * 3);
+        const sizes = new Float32Array(CONFIG.particles);
+
+        const colorPalette = [
+            new THREE.Color(0x00d4ff),
+            new THREE.Color(0x7c3aed),
+            new THREE.Color(0xec4899),
+            new THREE.Color(0x06f7f7),
+        ];
+
+        for (let i = 0; i < CONFIG.particles; i++) {
+            const radius = 12 + Math.random() * 25;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI * 2;
+            
+            positions[i * 3] = Math.sin(theta) * Math.cos(phi) * radius;
+            positions[i * 3 + 1] = Math.sin(theta) * Math.sin(phi) * radius * 0.5;
+            positions[i * 3 + 2] = Math.cos(theta) * radius;
+
+            const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+            sizes[i] = 0.02 + Math.random() * 0.08;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.08,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        return particles;
+    }
+    const particleSystem = createParticles();
+
+    // ─── FLOATING PANELS ───
+    const panels = [];
+    function createFloatingPanel(x, y, z, color, label) {
+        const group = new THREE.Group();
+
+        const geo = new THREE.BoxGeometry(1.8, 1.2, 0.08);
+        const mat = new THREE.MeshPhysicalMaterial({
+            color: 0x05050a,
+            metalness: 0.3,
+            roughness: 0.1,
+            transparent: true,
+            opacity: 0.7,
+            emissive: color,
+            emissiveIntensity: 0.08,
+            clearcoat: 0.4,
+            clearcoatRoughness: 0.2,
+            side: THREE.DoubleSide,
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.castShadow = true;
+        group.add(mesh);
+
+        const borderGeo = new THREE.EdgesGeometry(geo);
+        const borderMat = new THREE.LineBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.6,
+        });
+        const border = new THREE.LineSegments(borderGeo, borderMat);
+        group.add(border);
+
+        const ringGeo = new THREE.RingGeometry(0.6, 0.7, 32);
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.15,
+            side: THREE.DoubleSide,
+            blending: THREE.AdditiveBlending,
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.z = 0.05;
+        group.add(ring);
+
+        for (let i = 0; i < 4; i++) {
+            const dotGeo = new THREE.SphereGeometry(0.03, 8, 8);
+            const dotMat = new THREE.MeshBasicMaterial({ color: color });
+            const dot = new THREE.Mesh(dotGeo, dotMat);
+            const angle = (i / 4) * Math.PI * 2;
+            dot.position.set(Math.cos(angle) * 0.7, Math.sin(angle) * 0.4, 0.05);
+            group.add(dot);
+        }
+
+        group.position.set(x, y, z);
+        group.userData = {
+            floatSpeed: 0.3 + Math.random() * 0.5,
+            floatAmp: 0.1 + Math.random() * 0.15,
+            rotSpeed: 0.1 + Math.random() * 0.2,
+            phase: Math.random() * Math.PI * 2,
+            color: color,
+        };
+        scene.add(group);
+        panels.push(group);
+        return group;
+    }
+
+    const panelColors = [0x00d4ff, 0x7c3aed, 0xec4899, 0x06f7f7, 0xf59e0b, 0x22c55e];
+    for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const radius = 5;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const y = 0.5 + Math.sin(i * 1.5) * 0.8;
+        createFloatingPanel(x, y, z, panelColors[i % panelColors.length], '');
+    }
+
+    // ─── DATA CUBES ───
+    const dataCubes = [];
+    function createDataCube(x, y, z, color, height) {
+        const geo = new THREE.BoxGeometry(0.3, height, 0.3);
+        const mat = new THREE.MeshPhysicalMaterial({
+            color: color,
+            emissive: color,
+            emissiveIntensity: 0.3,
+            metalness: 0.4,
+            roughness: 0.2,
+            transparent: true,
+            opacity: 0.85,
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y + height/2, z);
+        mesh.castShadow = true;
+        scene.add(mesh);
+        dataCubes.push(mesh);
+        return mesh;
+    }
+
+    const gridSize = 7;
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            const x = (i - gridSize/2) * 0.5;
+            const z = (j - gridSize/2) * 0.5;
+            const dist = Math.sqrt(x*x + z*z);
+            if (dist < 1.5) continue;
+            const height = 0.2 + Math.random() * 0.8;
+            const colors = [0x00d4ff, 0x7c3aed, 0xec4899, 0x06f7f7];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const cube = createDataCube(x, -0.5, z, color, height);
+            cube.userData = {
+                baseHeight: height,
+                phase: Math.random() * Math.PI * 2,
+                speed: 0.5 + Math.random() * 0.5,
+            };
+        }
+    }
+
+    // ─── HOLOGRAM RING ───
+    function createHologramRing() {
+        const group = new THREE.Group();
+        const ringGeo = new THREE.TorusGeometry(1.8, 0.02, 16, 64);
+        const ringMat = new THREE.MeshPhysicalMaterial({
+            color: 0x00d4ff,
+            emissive: 0x00d4ff,
+            emissiveIntensity: 0.4,
+            transparent: true,
+            opacity: 0.6,
+            metalness: 0.5,
+            roughness: 0.1,
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2;
+        group.add(ring);
+
+        const ring2 = ring.clone();
+        ring2.material = ringMat.clone();
+        ring2.material.opacity = 0.3;
+        ring2.scale.set(1.3, 1.3, 1.3);
+        ring2.rotation.x = Math.PI / 2;
+        ring2.rotation.z = 0.3;
+        group.add(ring2);
+
+        const coreGeo = new THREE.SphereGeometry(0.4, 16, 16);
+        const coreMat = new THREE.MeshPhysicalMaterial({
+            color: 0x00d4ff,
+            emissive: 0x00d4ff,
+            emissiveIntensity: 0.6,
+            transparent: true,
+            opacity: 0.25,
+            metalness: 0.8,
+            roughness: 0.1,
+        });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        group.add(core);
+
+        group.position.set(0, 0.5, 0);
+        scene.add(group);
+        return group;
+    }
+    const hologramRing = createHologramRing();
+
+    // ─── AI ORB ───
+    function createAIOrb() {
+        const group = new THREE.Group();
+        
+        const orbGeo = new THREE.SphereGeometry(0.5, 24, 24);
+        const orbMat = new THREE.MeshPhysicalMaterial({
+            color: 0x7c3aed,
+            emissive: 0x7c3aed,
+            emissiveIntensity: 0.5,
+            transparent: true,
+            opacity: 0.8,
+            metalness: 0.1,
+            roughness: 0.1,
+        });
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        group.add(orb);
+
+        const glowGeo = new THREE.SphereGeometry(0.7, 16, 16);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: 0x7c3aed,
+            transparent: true,
+            opacity: 0.15,
+            blending: THREE.AdditiveBlending,
+        });
+        const glow = new THREE.Mesh(glowGeo, glowMat);
+        group.add(glow);
+
+        const ringOrbGeo = new THREE.TorusGeometry(0.6, 0.015, 8, 32);
+        const ringOrbMat = new THREE.MeshBasicMaterial({
+            color: 0xec4899,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending,
+        });
+        const ringOrb = new THREE.Mesh(ringOrbGeo, ringOrbMat);
+        ringOrb.rotation.x = Math.PI / 2;
+        group.add(ringOrb);
+
+        group.position.set(0, 2.5, -1.5);
+        scene.add(group);
+        return group;
+    }
+    const aiOrb = createAIOrb();
+
+    // ─── DATA STREAMS ───
+    function createDataStreams() {
+        const group = new THREE.Group();
+        for (let i = 0; i < 20; i++) {
+            const points = [];
+            const startAngle = Math.random() * Math.PI * 2;
+            const radius = 2 + Math.random() * 3;
+            for (let j = 0; j < 30; j++) {
+                const t = j / 30;
+                const angle = startAngle + t * 0.5;
+                const x = Math.cos(angle) * radius * (1 + t * 0.2);
+                const z = Math.sin(angle) * radius * (1 + t * 0.2);
+                const y = -1 + t * 3 + Math.sin(t * 10) * 0.2;
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            const geo = new THREE.BufferGeometry().setFromPoints(points);
+            const mat = new THREE.LineBasicMaterial({
+                color: [0x00d4ff, 0x7c3aed, 0xec4899, 0x06f7f7][Math.floor(Math.random() * 4)],
+                transparent: true,
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending,
+            });
+            const line = new THREE.Line(geo, mat);
+            group.add(line);
+        }
+        scene.add(group);
+        return group;
+    }
+    const dataStreams = createDataStreams();
+
+    // ─── GRID ───
+    function createGrid() {
+        const gridHelper = new THREE.GridHelper(20, 40, 0x00d4ff, 0x00d4ff);
+        gridHelper.material.transparent = true;
+        gridHelper.material.opacity = 0.1;
+        gridHelper.position.y = -1;
+        scene.add(gridHelper);
+
+        const gridHelper2 = new THREE.GridHelper(30, 60, 0x7c3aed, 0x7c3aed);
+        gridHelper2.material.transparent = true;
+        gridHelper2.material.opacity = 0.05;
+        gridHelper2.position.y = -1.1;
+        gridHelper2.rotation.x = 0.02;
+        scene.add(gridHelper2);
+    }
+    createGrid();
+
+    // ─── SERVICES FUNCTIONS ───
+    function openServices() {
+        document.getElementById('services-overlay').classList.add('active');
+    }
+
+    function closeServices() {
+        document.getElementById('services-overlay').classList.remove('active');
+    }
+
+    function openInquiry(serviceName) {
+        const overlay = document.getElementById('services-overlay');
+        if (!overlay.classList.contains('active')) {
+            overlay.classList.add('active');
+        }
+        setTimeout(() => {
+            const formContainer = document.getElementById('inquiryFormContainer');
+            const select = document.getElementById('serviceSelect');
+            for (let option of select.options) {
+                if (option.text === serviceName) {
+                    select.value = option.value || serviceName;
+                    break;
+                }
+            }
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            formContainer.style.borderColor = 'rgba(0,212,255,0.4)';
+            formContainer.style.boxShadow = '0 0 60px rgba(0,212,255,0.1)';
+            setTimeout(() => {
+                formContainer.style.borderColor = '';
+                formContainer.style.boxShadow = '';
+            }, 3000);
+        }, 500);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeServices();
+    });
+
+    function submitInquiry(e) {
+        e.preventDefault();
+        const name = document.getElementById('fullName').value;
+        const email = document.getElementById('emailAddr').value;
+        const phone = document.getElementById('phoneNum').value;
+        const service = document.getElementById('serviceSelect').value;
+        const message = document.getElementById('msgContent').value;
+
+        const subject = `Inquiry from ${name} - Solanki Digital Platform`;
+        const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APhone: ${phone}%0D%0AService: ${service}%0D%0AMessage: ${message}`;
+        
+        window.location.href = `mailto:solankiabhayp@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+        
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('inquiryForm').reset();
+        
+        setTimeout(() => {
+            document.getElementById('formSuccess').style.display = 'none';
+        }, 5000);
+    }
+
+    // ─── CHATBOT FUNCTIONS ───
+    function toggleChatbot() {
+        const container = document.getElementById('chatbot-container');
+        container.classList.toggle('open');
+        if (container.classList.contains('open')) {
+            document.getElementById('chatInput').focus();
+        }
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (!message) return;
+        
+        addMessage(message, 'user');
+        input.value = '';
+        
+        // Show typing indicator
+        showTyping();
+        
+        // Simulate AI response
+        setTimeout(() => {
+            const response = getAIResponse(message);
+            addMessage(response, 'bot');
+        }, 800 + Math.random() * 600);
+    }
+
+    function quickReply(text) {
+        document.getElementById('chatInput').value = text;
+        sendMessage();
+    }
+
+    function addMessage(text, sender) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = `message ${sender}`;
+        
+        if (sender === 'bot') {
+            div.innerHTML = `<div class="msg-sender">🤖 AI Assistant</div>${text}`;
+        } else {
+            div.textContent = text;
+        }
+        
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping() {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'message bot';
+        div.id = 'typingIndicator';
+        div.innerHTML = `
+            <div class="msg-sender">🤖 AI Assistant</div>
+            <div class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTyping() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+    }
+
+    function getAIResponse(message) {
+        removeTyping();
+        const msg = message.toLowerCase();
+        
+        // Smart responses based on keywords
+        if (msg.includes('billing') || msg.includes('invoice') || msg.includes('gst')) {
+            return `💰 <strong>Billing & Invoicing System</strong><br/><br/>
+            Our automated system handles:<br/>
+            • ✅ GST calculations (18%, 5%, 12%, 28%)<br/>
+            • 📄 100+ professional invoice templates<br/>
+            • 💳 Multi-currency support (USD, EUR, GBP, INR)<br/>
+            • 🔄 Recurring billing & subscriptions<br/>
+            • 📊 Real-time payment tracking<br/><br/>
+            <em>📌 Click "Book Now" on the Billing card to get started!</em>`;
+        }
+        
+        if (msg.includes('analytics') || msg.includes('dashboard') || msg.includes('chart')) {
+            return `📊 <strong>Business Analytics Dashboard</strong><br/><br/>
+            Our AI-powered dashboard provides:<br/>
+            • 📈 Real-time revenue tracking<br/>
+            • 👥 Customer behavior analytics<br/>
+            • 🔮 Predictive insights & trends<br/>
+            • 📊 50+ customizable metrics<br/>
+            • 🎯 Goal tracking & alerts<br/><br/>
+            <em>📌 Click "Book Now" on the Analytics card to get started!</em>`;
+        }
+        
+        if (msg.includes('trading') || msg.includes('market') || msg.includes('option')) {
+            return `📈 <strong>Trading Simulation Platform</strong><br/><br/>
+            Educational tools for learning:<br/>
+            • 📊 Option chain visualization (CALL/PUT)<br/>
+            • 🕯️ Candlestick charts & patterns<br/>
+            • 📉 Market trend analysis<br/>
+            • 🎮 Risk-free simulated trading<br/>
+            • 📚 Educational resources<br/><br/>
+            <em>📌 Click "Book Now" on the Trading card to get started!</em>`;
+        }
+        
+        if (msg.includes('ai') || msg.includes('insight') || msg.includes('intelligence')) {
+            return `🧠 <strong>AI-Powered Insights Engine</strong><br/><br/>
+            Our AI delivers:<br/>
+            • 🎯 Business recommendations<br/>
+            • 📊 Predictive analytics<br/>
+            • 📈 Market sentiment analysis<br/>
+            • 📝 Automated reporting<br/>
+            • 💡 Actionable intelligence<br/><br/>
+            <em>📌 Click "Book Now" on the AI Insights card to get started!</em>`;
+        }
+        
+        if (msg.includes('book') || msg.includes('price') || msg.includes('cost') || msg.includes('package')) {
+            return `📅 <strong>Ready to get started?</strong><br/><br/>
+            Here's how to book:<br/>
+            1️⃣ Click on any service card above<br/>
+            2️⃣ Click the <strong>"Book Now"</strong> button<br/>
+            3️⃣ Fill in your details in the form<br/>
+            4️⃣ We'll contact you within 2 hours!<br/><br/>
+            💰 Pricing is customized based on your requirements.<br/>
+            📞 You can also call us at <strong>+91 91757 09089</strong>`;
+        }
+        
+        if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+            return `👋 Hello! Great to see you here!<br/><br/>
+            I'm your AI assistant for <strong>Solanki Digital Platform XR</strong>.<br/>
+            I can help you with:<br/>
+            • 💰 Billing & Invoicing<br/>
+            • 📊 Analytics Dashboard<br/>
+            • 📈 Trading Simulation<br/>
+            • 🤖 AI Insights<br/>
+            • 📅 Booking services<br/><br/>
+            Just ask me anything! 🚀`;
+        }
+        
+        if (msg.includes('website') || msg.includes('web development') || msg.includes('web dev')) {
+            return `🌐 <strong>Website Development</strong><br/><br/>
+            We build stunning websites with:<br/>
+            • 📱 Responsive design (mobile-first)<br/>
+            • ⚡ 90+ Lighthouse scores<br/>
+            • 🛒 E-commerce integration<br/>
+            • 📝 CMS (WordPress, custom)<br/>
+            • 🔧 Modern frameworks (React, Next.js)<br/>
+            • 🎨 Custom UI/UX design<br/><br/>
+            <em>📌 Click "Book Now" on the Website Development card!</em>`;
+        }
+        
+        // Default response
+        return `🤖 I'm here to help!<br/><br/>
+        I can tell you about:<br/>
+        • 💰 Billing & Invoicing<br/>
+        • 📊 Analytics Dashboard<br/>
+        • 📈 Trading Simulation<br/>
+        • 🤖 AI Insights<br/>
+        • 🌐 Website Development<br/>
+        • 📅 How to book services<br/><br/>
+        What would you like to know more about? 😊`;
+    }
+
+    // ─── MOUSE TRACKING ───
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--mouse-x', x + '%');
+            card.style.setProperty('--mouse-y', y + '%');
+        });
+    });
+
+    // ─── MODE SWITCHING ───
+    let currentMode = 'dashboard';
+    let aiActive = true;
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.nav-btn[data-mode]').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+
+        const modeNames = { dashboard: 'DASHBOARD MODE', ar: 'AR MODE', vr: 'VR MODE' };
+        modeLabel.textContent = modeNames[mode] || 'DASHBOARD MODE';
+        hudMode.textContent = modeNames[mode] || 'DASHBOARD MODE';
+        modeDot.className = 'mode-dot';
+        modeDot.classList.add(mode);
+
+        if (mode === 'dashboard') {
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.8;
+            controls.minDistance = 4;
+            controls.maxDistance = 25;
+            camera.position.set(0, 4, 14);
+        } else if (mode === 'ar') {
+            controls.autoRotate = false;
+            controls.minDistance = 2;
+            controls.maxDistance = 10;
+            camera.position.set(0, 1, 6);
+            camera.lookAt(0, 0.5, 0);
+        } else if (mode === 'vr') {
+            controls.autoRotate = false;
+            controls.minDistance = 1;
+            controls.maxDistance = 8;
+            camera.position.set(0, 1.6, 3);
+            camera.lookAt(0, 0.5, 0);
+        }
+
+        hudStatus.textContent = mode.toUpperCase() + ' MODE';
+        hudStatus.style.background = `linear-gradient(135deg, ${mode === 'dashboard' ? '#00d4ff' : mode === 'ar' ? '#7c3aed' : '#ec4899'}, #000)`;
+        hudStatus.style.webkitBackgroundClip = 'text';
+        hudStatus.style.webkitTextFillColor = 'transparent';
+    }
+
+    // ─── AI TOGGLE ───
+    function toggleAI() {
+        aiActive = !aiActive;
+        const indicator = document.getElementById('ai-indicator');
+        indicator.className = 'indicator ' + (aiActive ? 'on' : 'off');
+        aiOrb.visible = aiActive;
+        aiOrb.scale.set(aiActive ? 1 : 0.01, aiActive ? 1 : 0.01, aiActive ? 1 : 0.01);
+    }
+
+    // ─── ANIMATION LOOP ───
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.01;
+        controls.update();
+
+        // Animate 3D Logo
+        if (logo3D) {
+            logo3D.rotation.x += logo3D.userData.rotSpeedX;
+            logo3D.rotation.y += logo3D.userData.rotSpeedY;
+            logo3D.rotation.z += logo3D.userData.rotSpeedZ;
+            logo3D.position.y = 1.2 + Math.sin(time * logo3D.userData.floatSpeed) * logo3D.userData.floatAmp;
+            
+            if (logo3D.children[0] && logo3D.children[0].material) {
+                logo3D.children[0].material.emissiveIntensity = 0.2 + Math.sin(time * 0.5) * 0.15;
+            }
+            if (logo3D.children[2]) logo3D.children[2].rotation.z = time * 0.3;
+            if (logo3D.children[3]) logo3D.children[3].rotation.x = time * 0.4;
+            if (logo3D.children[4]) logo3D.children[4].rotation.y = time * 0.5;
+            
+            if (logo3D.children[5] && logo3D.children[5].geometry) {
+                const positions = logo3D.children[5].geometry.attributes.position.array;
+                for (let i = 0; i < positions.length / 3; i++) {
+                    const angle = (i / (positions.length / 3)) * Math.PI * 2 + time * 0.5;
+                    const radius = 0.9 + Math.sin(time * 0.3 + i) * 0.1;
+                    positions[i * 3] = Math.cos(angle) * radius;
+                    positions[i * 3 + 2] = Math.sin(angle) * radius;
+                }
+                logo3D.children[5].geometry.attributes.position.needsUpdate = true;
+            }
+        }
+
+        panels.forEach((panel, i) => {
+            const data = panel.userData;
+            panel.position.y += Math.sin(time * data.floatSpeed + data.phase) * 0.001;
+            panel.rotation.y += data.rotSpeed * 0.003;
+            panel.rotation.x = Math.sin(time * 0.2 + i) * 0.02;
+            panel.rotation.z = Math.cos(time * 0.15 + i * 0.5) * 0.02;
+            if (panel.children.length > 0 && panel.children[1]) {
+                const border = panel.children[1];
+                if (border && border.material) {
+                    border.material.opacity = 0.3 + Math.sin(time * 0.5 + i) * 0.2;
+                }
+            }
+        });
+
+        dataCubes.forEach((cube, i) => {
+            const data = cube.userData;
+            const scaleY = 1 + Math.sin(time * data.speed + data.phase) * 0.2;
+            cube.scale.y = scaleY;
+            cube.material.emissiveIntensity = 0.1 + Math.sin(time * 0.5 + i) * 0.1;
+        });
+
+        hologramRing.rotation.y = time * 0.3;
+        hologramRing.rotation.x = Math.sin(time * 0.1) * 0.05;
+        hologramRing.children.forEach((child, i) => {
+            if (child.isMesh && child.geometry.type === 'TorusGeometry') {
+                child.material.opacity = 0.3 + Math.sin(time * 0.5 + i) * 0.15;
+            }
+        });
+
+        if (aiActive) {
+            aiOrb.position.y = 2.5 + Math.sin(time * 0.5) * 0.2;
+            aiOrb.rotation.y = time * 0.5;
+            aiOrb.children.forEach((child) => {
+                if (child.isMesh && child.geometry.type === 'SphereGeometry' && child.scale.x > 0.6) {
+                    child.material.opacity = 0.5 + Math.sin(time * 0.7) * 0.2;
+                }
+            });
+        }
+
+        particleSystem.rotation.y = time * 0.01;
+        particleSystem.rotation.x = Math.sin(time * 0.005) * 0.02;
+        dataStreams.rotation.y = time * 0.02;
+
+        renderer.render(scene, camera);
+    }
+
+    // ─── RESIZE ───
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ─── EXPOSE GLOBALLY ───
+    window.setMode = setMode;
+    window.toggleAI = toggleAI;
+    window.openServices = openServices;
+    window.closeServices = closeServices;
+    window.submitInquiry = submitInquiry;
+    window.openInquiry = openInquiry;
+    window.toggleChatbot = toggleChatbot;
+    window.sendMessage = sendMessage;
+    window.quickReply = quickReply;
+
+    // ─── START ───
+    setTimeout(() => {
+        loading.classList.add('hidden');
+    }, 1500);
+
+    animate();
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === '1') setMode('dashboard');
+        if (e.key === '2') setMode('ar');
+        if (e.key === '3') setMode('vr');
+        if (e.key === 'a') toggleAI();
+        if (e.key === 'r') controls.autoRotate = !controls.autoRotate;
+        if (e.key === 's') openServices();
+        if (e.key === 'q') closeServices();
+    });
+
+    console.log('🚀 Solanki Digital Platform XR initialized!');
+    console.log('📌 Keyboard shortcuts: 1=Dashboard, 2=AR, 3=VR, A=AI Toggle, R=Auto-rotate, S=Services, Q=Close Services');
+    console.log('🤖 Chatbot is ready! Click the robot icon to chat.');
+</script>
+
+</body>
+</html>
